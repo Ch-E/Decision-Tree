@@ -11,6 +11,9 @@ import pandas as pd
 train = pd.read_csv('D:/Documents/UFS/5th Year/Honours Project/Data Sources/train_V2.csv')
 train.head()
 
+print(train.columns)
+print(train.dtypes)
+
 test = pd.read_csv('D:/Documents/UFS/5th Year/Honours Project/Data Sources/test_V2.csv')
 test.head()
 
@@ -41,6 +44,9 @@ predictors = [  "kills",
                 "killPoints",
                ]
 
+#Normalise features
+test[predictors] = test[predictors].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+
 X = train[predictors]
 X.head()
 
@@ -48,7 +54,7 @@ y = train['winPlacePerc']
 y.head()
 
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.99999)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.99999, random_state=101)
 #**********************************Train & Test dataset**************************************
 
 from sklearn.tree import DecisionTreeRegressor
@@ -61,6 +67,7 @@ predictions = dtree.predict(X_test)
 
 #Metrics
 from sklearn.metrics import mean_absolute_error
+print("Mean Absolute Error:")
 print(mean_absolute_error(y_test, predictions))
 
 #**********************************Submission**************************************
